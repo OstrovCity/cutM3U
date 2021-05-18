@@ -2,41 +2,51 @@
 #-*- coding: utf-8 -*-
 
 # создадим массив строк для поиска
-list = ['group-title="ultra', 'group-title="фильмы', 'group-title="кино', 'group-title="спорт', 'group-title="познавательные', 'group-title="детские', 'group-title="мужские', 'group-title="россия']
-
-# откроем файлы
-f1 = open('file1.m3u', encoding='utf8')
-f2 = open('file2.m3u', 'w', encoding='utf8')
-
-# читаем содержимое файла f1 в массив строк
-lines = f1.readlines()
-
-# определим длинну массива строк из файла f1
-f1length = len(lines)
+srchlist = ['group-title="ultra', 'group-title="фильмы', 'group-title="кино', 'group-title="спорт', 'group-title="познавательные', 'group-title="детские', 'group-title="мужские', 'group-title="россия']
 
 # определим длинну массива строк переменных для поиска
-listlength = len(list)
+listlength = len(srchlist)
 
-# запишем заголовок из файла f1 в файл f2
-f2.write(lines[0])
+# откроем файл f1
+f1 = open('file1.m3u', encoding='utf8')
+
+# читаем содержимое файла f1 в массив строк
+linesf1 = f1.readlines()
+
+# закроем файл f1
+f1.close()
+
+# определим длинну массива строк из файла f1
+f1length = len(linesf1)
+
+# формируем массив строк для записи в файл f2
+linesf2 = []
+
+# добавим заголовок в массив строк для записи в файл f2
+linesf2.append(linesf1[0])
 
 for i in range(f1length):
-# читаем строку из файла f1
-    s = lines[i]
+# читаем строку из массива строк файла f1
+    s = linesf1[i]
 
 # ...и преобразовываем её к нижнему регистру
     s = s.lower()
 
     for n in range(listlength):
-        ss = list[n]
+        ss = srchlist[n]
 
-# если в строке из файла f1 есть подстрока из массива для поиска,
+# если в строке из массива строк файла f1 есть подстрока из массива для поиска,
         if ss in s:
 
-# то запишем её и следующую строку в файл f2
-            f2.write(lines[i])
-            f2.write(lines[i+1])
+# то добавим её и следующую строку в массив строк для записи в файл f2
+            linesf2.append(linesf1[i])
+            linesf2.append(linesf1[i+1])
 
-# закроем файлы
+# откроем файл f2
+f2 = open('file2.m3u', 'w', encoding='utf8')
+
+# сохраним подготовленный массив в файл f2
+f2.writelines(linesf2)
+
+# закроем файл f2
 f2.close()
-f1.close()	
